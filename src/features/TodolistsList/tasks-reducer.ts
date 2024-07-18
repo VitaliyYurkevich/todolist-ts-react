@@ -2,11 +2,27 @@ import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelTyp
 import {Dispatch} from 'redux'
 import {AppRootStateType} from '../../app/store'
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {todolistsActions} from "./todolists-reducer";
 import {appActions} from "../../app/app-reducer";
 
 const initialState: TasksStateType = {}
+
+const fetchTasks = createAsyncThunk('tasks/fetchTasks',
+    async (todolistId: string, thunkAPI) => {
+        const {dispatch, rejectWithValue} = thunkAPI
+        try {
+            dispatch(appActions.setAppStatus({status: 'loading'}))
+            const res = await todolistsAPI.getTasks(todolistId)
+            const tasks = res.data.items
+            dispatch(appActions.setAppStatus({status: 'succeeded'}))
+            return {tasks, todolistId}
+        } catch (error: any) {
+            handleServerNetworkError(error, dispatch)
+            return rejectWithValue(null)
+        }
+    })
+
 
 const slice = createSlice({
     name: 'tasks',
@@ -31,12 +47,9 @@ const slice = createSlice({
             if (index !== -1) {
                 tasks[index] = {...tasks[index], ...action.payload.model}
             }
-        },
-        setTasks: (state, action: PayloadAction<{ tasks: Array<TaskType>, todolistId: string }>) => {
-            state[action.payload.todolistId] = action.payload.tasks
-        },
+        }
     },
-    extraReducers: builder => {
+    extraReducers: (builder) => {
         builder
             .addCase(todolistsActions.addTodolist, (state, action) => {
                 state[action.payload.todolist.id] = []
@@ -49,55 +62,25 @@ const slice = createSlice({
                     state[tl.id] = []
                 })
             })
+            .addCase(fetchTasks.fulfilled, (state, action) => {
+                state[action.payload.todolistId] = action.payload.tasks
+            })
+            .addCase(fetchTasks.rejected, (state, action)=>{
+
+            })
     }
 })
 
-/*export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
-    switch (action.type) {
-        case 'REMOVE-TASK':
-            return {...state, [action.todolistId]: state[action.todolistId].filter(t => t.id != action.taskId)}
-        case 'ADD-TASK':
-            return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
-        case 'UPDATE-TASK':
-            return {
-                ...state,
-                [action.todolistId]: state[action.todolistId]
-                    .map(t => t.id === action.taskId ? {...t, ...action.model} : t)
-            }
-        case 'ADD-TODOLIST':
-            return {...state, [action.todolist.id]: []}
-        case 'REMOVE-TODOLIST':
-            const copyState = {...state}
-            delete copyState[action.id]
-            return copyState
-        case 'SET-TODOLISTS': {
-            const copyState = {...state}
-            action.todolists.forEach(tl => {
-                copyState[tl.id] = []
-            })
-            return copyState
-        }
-        case 'SET-TASKS':
-            return {...state, [action.todolistId]: action.tasks}
-        default:
-            return state
-    }
-}*/
 
 export const tasksReducer = slice.reducer
 
 export const tasksActions = slice.actions
 
+export const tasksThunks = {fetchTasks}
+
 // thunks
-export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
-    dispatch(appActions.setAppStatus({status: 'loading'}))
-    todolistsAPI.getTasks(todolistId)
-        .then((res) => {
-            const tasks = res.data.items
-            dispatch(tasksActions.setTasks({tasks, todolistId}))
-            dispatch(appActions.setAppStatus({status: 'succeeded'}))
-        })
-}
+
+
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch) => {
     todolistsAPI.deleteTask(todolistId, taskId)
         .then(res => {
