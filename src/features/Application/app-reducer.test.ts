@@ -3,6 +3,7 @@ import {
 	AppInitialStateType,
 	appReducer,
 } from './app-reducer'
+import {setAppError, setAppStatus} from "../CommonActions/ApplicationCommonActions";
 
 let startState: AppInitialStateType;
 
@@ -15,14 +16,14 @@ beforeEach(() => {
 })
 
 test('correct error message should be set', () => {
-	// @ts-ignore
-	const endState = appReducer(startState, appActions.setAppError({error: 'some error'}))
+
+	const endState = appReducer(startState, setAppError({error: 'some error'}))
 	expect(endState.error).toBe('some error');
 })
 
 test('correct status should be set', () => {
 
-	const endState = appReducer(startState, appActions.setAppStatus({status: 'loading'}))
+	const endState = appReducer(startState, setAppStatus({status: 'loading'}))
 	expect(endState.status).toBe('loading');
 })
 

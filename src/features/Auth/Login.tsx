@@ -1,16 +1,18 @@
 import React from 'react'
 import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
-import { loginTC } from './auth-reducer'
-import { AppRootStateType } from '../../app/store'
+import {authThunk} from './auth-reducer'
 import { Navigate } from 'react-router-dom'
-import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from '@mui/material'
+import {selectIsLoggedIn} from "./selectors";
+import {useActions} from "../../app/store";
+import {authActions} from "./index";
 
 export const Login = () => {
-    const dispatch = useAppDispatch()
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
+
+    const {loginTC, logoutTC} = useActions(authActions)
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     const formik = useFormik({
         validate: (values) => {
@@ -31,8 +33,16 @@ export const Login = () => {
             password: '',
             rememberMe: false
         },
-        onSubmit: values => {
-            dispatch(loginTC(values));
+        onSubmit: async (values, formikHelpers) => {
+            const res = await loginTC(values)
+             if(authThunk.loginTC.rejected.match(res)) {
+                 if(res.payload?.fieldsErrors) {
+                     //const error = res.payload?.fieldsErrors[0]
+                     formikHelpers.setFieldError('email', 'fakeError')
+                 } else {
+
+                 }
+             }
         },
     })
 
