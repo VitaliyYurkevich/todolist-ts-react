@@ -20,7 +20,6 @@ export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType
             } else {
                 handleServerAppError(res.data, thunkAPI.dispatch)
 
-
                 // @ts-ignore
                 return rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
             }
@@ -54,3 +53,21 @@ export const logoutTC = createAsyncThunk('auth/logout',
         }
     }
 )
+
+export const initializeAppTC = createAsyncThunk<{ isLoggedIn: boolean }>('application/initializeApp', async (param, {
+    dispatch,
+    rejectWithValue
+}) => {
+    const res = await authAPI.me()
+    try {
+        if (res.data.resultCode === 0) {
+            dispatch(appActions.setAppInitialized({isInitialized: true}))
+            return {isLoggedIn: true}
+        } else {
+            handleServerAppError(res.data, dispatch)
+            return rejectWithValue(null)
+        }
+    } catch (e) {
+        return rejectWithValue(null)
+    }
+})

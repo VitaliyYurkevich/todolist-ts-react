@@ -9,8 +9,7 @@ import {Todolist} from './Todolist/Todolist'
 import {Navigate} from 'react-router-dom'
 import {useAppDispatch} from '../../hooks/useAppDispatch';
 import {selectIsLoggedIn} from "../Auth/selectors";
-import {tasksActions, todolistsActions} from "./index";
-import {authActions} from "../Auth/auth-reducer";
+import {todolistsActions} from "./index";
 
 type PropsType = {
     demo?: boolean
@@ -30,12 +29,14 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (demo || !isLoggedIn) {
+
+        if (!isLoggedIn) {
+
             return;
         }
         const thunk = todolistsThunk.fetchTodolistsTC()
 
-       dispatch(authActions.setIsLoggedIn({isLoggedIn: true}))
+       //dispatch(authActions.setIsLoggedIn({isLoggedIn: true}))
         dispatch(thunk)
     }, [])
 

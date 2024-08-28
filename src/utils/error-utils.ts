@@ -1,7 +1,5 @@
-
 import {ResponseType} from '../api/todolists-api'
 import {Dispatch} from 'redux'
-import {appActions} from "../features/Application/app-reducer";
 import axios from "axios";
 import {AppDispatch} from "../app/store";
 import {setAppError, setAppStatus} from "../features/CommonActions/ApplicationCommonActions";
