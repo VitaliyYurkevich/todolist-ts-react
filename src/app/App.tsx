@@ -120,8 +120,8 @@ function App() {
 
                 <Container fixed>
                     <Routes>
-                        <Route path={'/'} element={<TodolistsList/>}/>
-                        <Route path={'/todolist-ts-react/'} element={<TodolistsList/>}/>
+                        {/*<Route path={'/'} element={<TodolistsList/>}/>*/}
+                        <Route path={'/todolist-ts-react'} element={<TodolistsList/>}/>
                         <Route path={'/login'} element={<Login/>}/>
                     </Routes>
                 </Container>
