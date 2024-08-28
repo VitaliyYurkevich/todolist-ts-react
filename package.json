@@ -7,7 +7,7 @@
 	},
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://VitaliyYurkevich.github.io/todolist-ts-react",
+	"homepage": "https://vitaliyyurkevich.github.io/todolist-ts-react/",
 	"dependencies": {
 		"@babel/runtime": "^7.23.7",
 		"@emotion/react": "^11.11.3",
