@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Route, Routes} from 'react-router-dom'
 import {Login} from '../features/Auth/Login'
 import {
-    AppBar,
+    AppBar, CircularProgress,
     Container,
     createTheme,
     CssBaseline,
@@ -63,7 +63,6 @@ function App() {
 
 
    useEffect(()=> {
-       debugger
        localStorage.setItem('theme', themeMode)
    }, [themeMode])
 
@@ -84,13 +83,12 @@ function App() {
 
     }, [])
 
-    /* if (!isInitialized) {
-         console.log(status)
+     if (!isInitialized) {
          return <div
              style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
              <CircularProgress/>
          </div>
-     }*/
+     }
 
 
 

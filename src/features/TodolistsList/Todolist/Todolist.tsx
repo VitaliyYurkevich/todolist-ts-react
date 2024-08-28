@@ -92,7 +92,7 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
                !tasksForTodolist.length && <div style={{padding: '10px', color: 'grey'}}>No task</div>
             }
         </div>
-        <div style={{paddingTop: '10px'}}>
+        <div style={{paddingTop: '10px', display: 'flex'}}>
             <FilterButton title={'all'} filterButton={'all'} filter={"all"} color={"inherit"}
                           onClickHandler={onAllClickHandler}/>
             <FilterButton title={'active'} filterButton={'active'} filter={"active"} color={"primary"}
