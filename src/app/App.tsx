@@ -25,6 +25,7 @@ import {useActions} from "./store";
 import {authActions} from "../features/Auth";
 import {authThunk} from "../features/Auth/auth-reducer";
 import {MenuButton} from "../features/MenuButton/MenuButton";
+import {styled} from "@mui/material/styles";
 
 type ThemeMode = 'dark' | 'light' | string
 
@@ -102,12 +103,12 @@ function App() {
                         <IconButton edge="start" color="inherit" aria-label="menu">
                             <MenuIcon onClick={onClickHandler}/>
                         </IconButton>
-                        <Menu style={{top: -480}} open={showBurger} onClose={onClickHandler}>
-                            <MenuItem>
+                        <StyledMenu open={showBurger} onClose={onClickHandler}>
+                            <StyledMenuItem>
                                 <MenuButton background={theme.palette.primary.dark}>Theme</MenuButton>
                                  <Switch  color={'default'} onChange={changeModeHandler}/>
-                            </MenuItem>
-                        </Menu>
+                            </StyledMenuItem>
+                        </StyledMenu>
                         <Typography variant="h6">
                             Todo
                         </Typography>
@@ -128,4 +129,20 @@ function App() {
     )
 }
 
+
+const StyledMenu = styled(Menu)`
+  top: -730px;
+ 
+  @media screen and (max-width: 680px) {
+    top: -770px;
+  }
+  
+`
+
+const StyledMenuItem = styled(MenuItem)`
+  @media screen and (max-width: 680px) {
+    width: 200px;
+    height: 40px;
+  }
+`
 export default App
