@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {useDispatch, useSelector} from 'react-redux'
-import {Route, Routes} from 'react-router-dom'
+import {redirect, Route, Routes} from 'react-router-dom'
 import {Login} from '../features/Auth/Login'
 import {
     AppBar, CircularProgress,
@@ -84,12 +84,13 @@ function App() {
 
     }, [])
 
-     if (!isInitialized) {
+     /*if (!isInitialized) {
          return <div
              style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
              <CircularProgress/>
+
          </div>
-     }
+     }*/
 
 
 
